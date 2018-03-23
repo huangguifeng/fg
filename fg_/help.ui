@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Help</class>
+ <widget class="QWidget" name="Help">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>631</width>
+    <height>412</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>帮助</string>
+  </property>
+  <widget class="QPlainTextEdit" name="plainTextEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>631</width>
+     <height>411</height>
+    </rect>
+   </property>
+   <property name="plainText">
+    <string>
+
+数据说明：
+    抓取职位：指定页数所有职位总数
+
+    符合条件：属于本公司品牌下的职位
+
+    职位占比：符合条件职位数除以抓取职位的数量，即本公司职位占指定页数总职位数的占比
+
+同行数据：如果需要抓取同行的数据，只需要填写同行的公司名称，如果同行公司名称留空，那么就是抓取本公司的覆盖率。
+
+如果抓取页数比较多，网速比较慢的情况下，抓取完数据比较慢，请稍微等待下，不要频繁点击开始。
+
+城市只包含了本公司所推广的城市！</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>320</y>
+     <width>71</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ok</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

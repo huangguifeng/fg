@@ -18,6 +18,8 @@ class Mysqlite():
             self.q.exec_("create table if not exists ganji (id int unsigned auto_increment primary key not null,name varchar(50))") 
         if cid == 4: 
             self.q.exec_("create table if not exists zhonghua (id int unsigned auto_increment primary key not null,name varchar(50))") 
+        if cid == 5: 
+            self.q.exec_("create table if not exists qiancheng (id int unsigned auto_increment primary key not null,name varchar(50))") 
         self.q.exec_("commit") 
         return self.q
     def select(self, cid, id):    
@@ -30,7 +32,8 @@ class Mysqlite():
             return self.__to_select('ganji', id)
         if cid==4:
             return self.__to_select('zhonghua', id)  
-            
+        if cid==5:
+            return self.__to_select('qiancheng', id)          
     def __to_select(self, db_name, id):
         self.q.exec('select * from %s where id=%s'%(db_name, id))  
         f1= self.q.record().indexOf('id') 
@@ -52,7 +55,8 @@ class Mysqlite():
             return self.__to_list('ganji')
         if cid==4:
             return self.__to_list('zhonghua')       
-            
+        if cid==5:
+            return self.__to_list('qiancheng')              
     def __to_list(self, args):
         self.q.exec('select * from %s'%args)  
         f1= self.q.record().indexOf('id') 
@@ -80,7 +84,8 @@ class Mysqlite():
             return self.__to_insert('ganji', name)
         if cid==4:
             return self.__to_insert('zhonghua', name) 
-            
+        if cid==5:
+            return self.__to_insert('qiancheng', name)             
     def __to_insert(self, db_name, name):
         id = int(time.time()*1000)
         self.q.exec('insert into %s values (%s,"%s")'%( db_name,id, name))
@@ -95,7 +100,8 @@ class Mysqlite():
             return self.__to_delete('ganji', name)
         if cid==4:
             return self.__to_delete('zhonghua', name) 
-            
+        if cid==5:
+            return self.__to_delete('qiancheng', name)             
     def __to_delete(self, db_name, id):
         self.q.exec('delete from %s where id=%s'%( db_name,id))
         self.q.exec_("commit")
@@ -109,7 +115,8 @@ class Mysqlite():
             return self.__to_update('ganji', id, name)
         if cid==4:
             return self.__to_update('zhonghua', id, name) 
-            
+        if cid==5:
+            return self.__to_update('qiancheng', id, name)            
     def __to_update(self, db_name, id, name):
         self.q.exec('update %s set name="%s" where id=%s'%(db_name, name, id))
         self.q.exec_("commit")

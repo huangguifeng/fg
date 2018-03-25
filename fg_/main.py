@@ -10,9 +10,11 @@ import info  # 58同城信息
 import zlinfo
 import gjinfo
 import  zhinfo
+import qcinfo
 import spider_58
 import  spider_zl
 import spdier_gj
+import spider_qiancheng
 import spider_chinahr
 from Ui_about import  Ui_Form
 from Ui_help import  Ui_Help
@@ -68,6 +70,14 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             self.comboBox_15.addItem(k, v)  # 键、值反转        
         for k, v in sorted(zhinfo.POSITION.items()):
             self.comboBox_13.addItem(k, v)  # 键、值反转               
+        ####前程
+        self.comboBox_22.addItem(u'请选择')
+        self.comboBox_20.addItem(u'请选择')
+        
+        for k, v in sorted(qcinfo.CITY.items()):
+            self.comboBox_22.addItem(k, v)  # 键、值反转        
+        for k, v in sorted(qcinfo.POSITION.items()):
+            self.comboBox_20.addItem(k, v)  # 键、值反转                     
         
     def center(self):  
         '''设置窗口在屏幕居中'''
@@ -124,6 +134,19 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             self.comboBox_14.addItem('请选择')
             for k, v in sorted(zhinfo.POSITION[key].items()):
                 self.comboBox_14.addItem(k, v)  # 键、值反转
+    #前程
+    @pyqtSlot(int)
+    def on_comboBox_20_activated(self, index):
+
+        # 取职位大类的键值
+        key  = self.comboBox_20.itemText(index)
+        self.comboBox_21.clear() # 清空items
+     
+        if key:
+            self.comboBox_21.addItem('请选择')
+            for k, v in sorted(qcinfo.POSITION[key].items()):
+                self.comboBox_21.addItem(k, v)  # 键、值反转      
+                
     @pyqtSlot()
     def on_pushButton_clicked(self):
         # 58
@@ -146,7 +169,7 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             return
         rsdata, num = spider.spiderTc(city, position_b_type,  position_s_type)
         if rsdata:
-            horizontalHeader = ["公司名称","职位地址","职位名称","职位所在页",'职位总数', u'职位总页数', "抓取时间"]
+            horizontalHeader = ["公司名称","职位名称","职位地址","职位所在页",'职位总数', u'职位总页数', "抓取时间"]
             self.tableWidget.setColumnCount(7)
             self.tableWidget.setRowCount(len(rsdata))
             self.tableWidget.setHorizontalHeaderLabels(horizontalHeader)
@@ -157,6 +180,8 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             for i, data in enumerate(rsdata):
                 for j in range(7):
                     self.tableWidget.setItem(i,j,QTableWidgetItem(str(data[horizontalHeader[j]])))
+                    self.tableWidget.setColumnWidth(1, 200)
+                    self.tableWidget.setColumnWidth(0, 200)
         else:
             self.textEdit.clear()
             self.tableWidget.clearContents ()    
@@ -195,6 +220,8 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             for i, data in enumerate(rsdata):
                 for j in range(len(horizontalHeader)):
                     self.tableWidget_3.setItem(i,j,QTableWidgetItem(str(data[horizontalHeader[j]])))
+                    self.tableWidget_3.setColumnWidth(1, 250)
+                    self.tableWidget_3.setColumnWidth(0, 200)     
         else:
             self.textEdit_3.clear()
             self.textEdit_3.setText("抓取完成：\n城市：%s 职位类型：%s-%s \n前%s页:无数据"%(city,position_b_type, position_s_type , page))
@@ -233,6 +260,8 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             for i, data in enumerate(rsdata):
                 for j in range(len(horizontalHeader)):
                     self.tableWidget_4.setItem(i,j,QTableWidgetItem(str(data[horizontalHeader[j]])))
+                    self.tableWidget_4.setColumnWidth(1, 250)
+                    self.tableWidget_4.setColumnWidth(0, 200)     
         else:
             self.textEdit_4.clear()
             self.textEdit_4.setText("抓取完成：\n城市：%s 职位类型：%s-%s \n前%s页:无数据"%(city,position_b_type, position_s_type , page))
@@ -271,6 +300,9 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             for i, data in enumerate(rsdata):
                 for j in range(len(horizontalHeader)):
                     self.tableWidget_5.setItem(i,j,QTableWidgetItem(str(data[horizontalHeader[j]])))
+                    self.tableWidget_5.setColumnWidth(1, 250)
+                    self.tableWidget_5.setColumnWidth(0, 200)                    
+                   
         else:
             self.textEdit_5.clear()
             self.textEdit_5.setText("抓取完成：\n城市：%s 职位类型：%s-%s \n前%s页:无数据"%(city,position_b_type, position_s_type , page))
@@ -278,6 +310,49 @@ class MainWindows(QMainWindow,Ui_MainWindow):
             self.lineEdit_18.clear()
             self.lineEdit_19.clear()   
             self.tableWidget_5.clearContents ()
+    @pyqtSlot()
+    def on_pushButton_12_clicked(self):    
+        # 前程
+        btitle_index = self.comboBox_20.currentIndex()
+        stitle_index = self.comboBox_21.currentIndex()
+        # 取当前职位名称
+        position_b_type = self.comboBox_20.itemText(btitle_index)
+        position_s_type = self.comboBox_21.itemText(stitle_index)
+        city_ind= self.comboBox_22.currentIndex()
+        city = self.comboBox_22.itemText(city_ind)
+        peer = self.lineEdit_30.text()
+        page  = self.spinBox_6.value()
+        print(position_b_type, position_b_type)
+        self.textEdit_6.setText("城市：%s    职位类型：%s-%s \n抓取页数：%s %s"%(city,position_b_type, position_s_type , page, peer))
+        if city=='请选择' or position_b_type=='请选择' or position_s_type=='请选择':
+            return   
+        a, b= mysqlite.select_all(5)       
+        spdier = spider_qiancheng.Qiancheng( city, page, position_b_type, position_s_type, peer, b)
+        spdier.spider()
+        rsdata, num = spdier.data()
+        if rsdata:
+            horizontalHeader = ["职位名称","公司名称","工作地点","发布时间", "职位所在页"]
+            self.tableWidget_6.setColumnCount(len(horizontalHeader))
+            self.tableWidget_6.setRowCount(len(rsdata))
+            self.tableWidget_6.setHorizontalHeaderLabels(horizontalHeader)
+            self.tableWidget_6.setEditTriggers(QTableWidget.NoEditTriggers)
+            
+            self.lineEdit_27.setText(str(num))
+            self.lineEdit_28.setText(str(len(rsdata)))
+            self.lineEdit_29.setText('%.2f%%'%(len(rsdata)/num*100))
+            for i, data in enumerate(rsdata):
+                for j in range(len(horizontalHeader)):
+                    self.tableWidget_6.setItem(i,j,QTableWidgetItem(str(data[horizontalHeader[j]])))
+                    self.tableWidget_6.setColumnWidth(1, 250)
+                    self.tableWidget_6.setColumnWidth(0, 200)
+              
+        else:
+            self.textEdit_6.clear()
+            self.textEdit_6.setText("抓取完成：\n城市：%s 职位类型：%s-%s \n前%s页:无数据"%(city,position_b_type, position_s_type , page))
+            self.lineEdit_27.clear()
+            self.lineEdit_28.clear()
+            self.lineEdit_29.clear()   
+            self.tableWidget_6.clearContents ()
 
 class AboutWindow(QWidget, Ui_Form):
     # 关于
@@ -373,20 +448,26 @@ class CompanyWindow(QWidget,Ui_Company):
                 for j in range(len(horizontalHeader) +1):
                     if j < len(data):
                         self.tableWidget.setItem(i,j,QTableWidgetItem(str(data[horizontalHeader[j]])))
-                        self.tableWidget.setColumnWidth(1, 250) 
-                        self.tableWidget.setColumnWidth(2, 300)
+                        self.tableWidget.setColumnWidth(0, 100) 
                         self.tableWidget.setColumnWidth(1, 300)
+                        self.tableWidget.setColumnWidth(2, 330)
+                        
                     if  j == len(data):
                         self.tableWidget.setCellWidget(i, j,self.buttonForRow(str(data["id"])))
+                        
                     
         
         def updateTable(self, id):
+            if not id:
+                return
             id, name = mysqlite.select(self.cid, id)
             self.update_win.lineEdit_2.setText(name)
             self.update_win.show()
             self.update_win.pushButton_3.clicked.connect(lambda:self.update_win.update(id))
             self.close()
         def deleteTable(self, id):
+            if not id:
+                return
             id, name = mysqlite.select(self.cid, id)
             self.delete_win.lineEdit.setText(name)
             self.delete_win.show()
@@ -449,7 +530,8 @@ def show_ganji():
     show_company(3)
 def show_zhonghua():
     show_company(4)
-
+def show_qiancheng():
+    show_company(5)
 
     
 if __name__ == "__main__":
@@ -468,6 +550,7 @@ if __name__ == "__main__":
     dlg.actiond.triggered.connect(show_zhilian)
     dlg.actionga.triggered.connect(show_ganji)
     dlg.actionz.triggered.connect(show_zhonghua)
+    dlg.actionqc.triggered.connect(show_qiancheng)
   
 
     sys.exit(app.exec_())

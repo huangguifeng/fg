@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-5.1.dtd">
 <!-- eric project file for project zhappin -->
-<!-- Saved: 2018-03-23, 22:28:28 -->
+<!-- Saved: 2018-03-25, 21:39:15 -->
 <!-- Copyright (C) 2018 ,  -->
 <Project version="5.1">
   <Language></Language>
@@ -26,9 +26,12 @@
     <Source>info.py</Source>
     <Source>main.py</Source>
     <Source>my_connect_sql.py</Source>
+    <Source>qcinfo.py</Source>
+    <Source>qiancheng_zhiwei.py</Source>
     <Source>spdier_gj.py</Source>
     <Source>spider_58.py</Source>
     <Source>spider_chinahr.py</Source>
+    <Source>spider_qiancheng.py</Source>
     <Source>spider_zl.py</Source>
     <Source>tc.py</Source>
     <Source>zhinfo.py</Source>
